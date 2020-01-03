@@ -61,28 +61,120 @@ class Board extends React.Component{
                 
                 //checks if any other pieces are in its path to move.
                 }else if((p1!==this.state.turn||p2!==this.state.turn)&&this.state.clicked===false){
-                    console.log('4');
-                    
+                    var noMovePossible=false;
+                    console.log('4'); 
                     //sets possible movement pieces to gray.
-                    if(p1!==this.state.turn){
+                    if(p1!=='wr'&&p1!=='rr'&&(j-1)!==-1){
                         copyBoardMap[i-1][j-1]='g';
+                        noMovePossible=true;
+                        console.log('yea1');
+                        console.log(p1);
                     }
-                    if(p2!==this.state.turn){
+                    if(p2!=='wr'&&p2!=='rr'){
                         copyBoardMap[i-1][j+1]='g';
+                        noMovePossible=true;
+                        console.log('yea2');
                     }
-                    this.setState({clicked: true,BoardMap:copyBoardMap});
+                    
+                    if(noMovePossible){
+                        this.setState({clicked: true,BoardMap:copyBoardMap});
+                    }
+                    
                     console.log('yea');
                 }
+            }else{
+                console.log('2.1');
+                var p1=copyBoardMap[i+1][j-1];
+                var p2=copyBoardMap[i+1][j+1];
+
+                //checks if the piece has already been clicked.
+                if(copyBoardMap[i+1][j-1]==='g' && copyBoardMap[i+1][j+1]==='g'){
+                    copyClickMap[i][j]=0;
+                    console.log('3.1');
+                    copyBoardMap[i+1][j-1]='b';
+                    copyBoardMap[i+1][j+1]='b';
+                    
+                    this.setState({clicked: false,
+                        BoardMap:copyBoardMap,
+                        clickMap:copyClickMap});
+                
+                //checks if any other pieces are in its path to move.
+                }else if((p1!==this.state.turn||p2!==this.state.turn)&&this.state.clicked===false){
+                    var noMovePossible=false;
+                    console.log('4.1'); 
+                    //sets possible movement pieces to gray.
+                    if(p1!=='wr'&&p1!=='rr'&&(j-1)!==-1){
+                        copyBoardMap[i+1][j-1]='g';
+                        noMovePossible=true;
+                        console.log('yea1.1');
+                    }
+                    if(p2!=='wr'&&p2!=='rr'){
+                        copyBoardMap[i+1][j+1]='g';
+                        noMovePossible=true;
+                        console.log('yea2.1');
+                    }
+                    
+                    if(noMovePossible){
+                        this.setState({clicked: true,BoardMap:copyBoardMap});
+                    }
+                    
+                    console.log('yea.1');
+                }
             }
-        }else if(color==='g'&&this.state.turn==='wr'){
-            console.log('5');
-            var point=copyClickMap[i+1][j+1];
-            var p2=this.state.clickMap[i+1][j-1];
-            if(point===1){
-                console.log('6');
-                copyBoardMap[i][j]='wr';
-                copyBoardMap[i+1][j+1]='b';
-                this.setState({clicked: false,BoardMap:copyBoardMap});
+        //moves the tiles
+        }else if(color==='g'){
+            if(this.state.turn==='wr'){
+                console.log('5');
+                var point=copyClickMap[i+1][j+1];
+                
+                //var p2=this.state.clickMap[i+1][j-1];
+                if(point===1){
+                    console.log('6');
+                    copyBoardMap[i][j]='wr';
+                    copyBoardMap[i+1][j+1]='b';
+
+                    if(copyBoardMap[i][j+2]==='g'){
+                        copyBoardMap[i][j+2]='b';
+                    }
+
+                    copyClickMap[i+1][j+1]=0;
+                    this.setState({turn:'rr',clicked: false,BoardMap:copyBoardMap,clickMap:copyClickMap});
+                }else{
+                    console.log('7');
+                    copyBoardMap[i][j]='wr';
+                    copyBoardMap[i+1][j-1]='b';
+                    if(copyBoardMap[i][j-2]==='g'){
+                        copyBoardMap[i][j-2]='b';
+                    }
+                    copyClickMap[i+1][j-1]=0;
+                    this.setState({turn:'rr',clicked: false,BoardMap:copyBoardMap,clickMap:copyClickMap});
+                }
+            }else{
+                console.log('7');
+                var point=copyClickMap[i-1][j+1];
+                
+                //var p2=this.state.clickMap[i+1][j-1];
+                if(point===1){
+                    console.log('6');
+                    copyBoardMap[i][j]='rr';
+                    copyBoardMap[i-1][j+1]='b';
+
+                    if(copyBoardMap[i][j+2]==='g'){
+                        copyBoardMap[i][j+2]='b';
+                    }
+
+                    copyClickMap[i+1][j+1]=0;
+                    this.setState({turn:'wr',clicked: false,BoardMap:copyBoardMap,clickMap:copyClickMap});
+                }else{
+                    console.log('7');
+                    copyBoardMap[i][j]='rr';
+                    copyBoardMap[i-1][j-1]='b';
+                    if(copyBoardMap[i][j-2]==='g'){
+                        copyBoardMap[i][j-2]='b';
+                    }
+                    copyClickMap[i+1][j-1]=0;
+                    this.setState({turn:'wr',clicked: false,BoardMap:copyBoardMap,clickMap:copyClickMap});
+                }
             }
         }
     }

@@ -1,7 +1,7 @@
 import React from 'react';
 import whitePiece from '../whitePiece.png';
 import redPiece from '../redPiece.png';
-import movPiece from '../moveTile.png';
+//import movPiece from '../moveTile.png';
 
 function getBackgroundImage(props1){
     switch(props1.color){
